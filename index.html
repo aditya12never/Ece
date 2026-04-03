@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassPortal - Attendance App</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    nav {
+      background: #0f172a;
+      color: white;
+      padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .nav-btn {
+      background: transparent;
+      color: #cbd5e1;
+      border: 1px solid transparent;
+    }
+
+    .nav-btn:hover {
+      background: #1e293b;
+    }
+
+    .nav-btn.active {
+      background: #2563eb;
+      color: white;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      padding: 24px;
+    }
+
+    .center-wrap {
+      max-width: 500px;
+      margin: 40px auto;
+    }
+
+    h1, h2, h3, p {
+      margin-top: 0;
+    }
+
+    .subtitle {
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 2px solid #e2e8f0;
+      outline: none;
+      font-size: 16px;
+      margin-bottom: 14px;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px #dbeafe;
+    }
+
+    .big-input {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .primary-btn {
+      width: 100%;
+      background: #2563eb;
+      color: white;
+      padding: 14px;
+      font-size: 16px;
+    }
+
+    .primary-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .primary-btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .dark-btn {
+      width: 100%;
+      background: #1e293b;
+      color: white;
+      padding: 14px;
+      font-size: 16px;
+    }
+
+    .dark-btn:hover {
+      background: #0f172a;
+    }
+
+    .dark-btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .sig-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .sig-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .sig-option {
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+      border: 2px solid #e2e8f0;
+      background: white;
+      padding: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .sig-option.active-yes {
+      border-color: #7c3aed;
+      background: #f3e8ff;
+      color: #6d28d9;
+    }
+
+    .sig-option.active-no {
+      border-color: #64748b;
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .message {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .info {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .small-note {
+      margin-top: 18px;
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .small-note b {
+      color: #0f172a;
+    }
+
+    .dashboard-header {
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 18px 0;
+      position: sticky;
+      top: 56px;
+      z-index: 90;
+    }
+
+    .dashboard-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      background: #f1f5f9;
+      padding: 6px;
+      border-radius: 12px;
+    }
+
+    .filter-btn {
+      background: transparent;
+      color: #475569;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .filter-btn.active {
+      background: white;
+      color: #1d4ed8;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .logout-btn {
+      background: #fff1f2;
+      color: #e11d48;
+      border: 1px solid #fecdd3;
+    }
+
+    .logout-btn:hover {
+      background: #ffe4e6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .stat-title {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #0f172a;
+    }
+
+    .section-card {
+      margin-top: 20px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .section-head {
+      padding: 16px;
+      border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+    }
+
+    .section-body {
+      padding: 16px;
+    }
+
+    .inline-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .inline-form input {
+      flex: 1;
+      min-width: 220px;
+      margin-bottom: 0;
+    }
+
+    .add-btn {
+      background: #2563eb;
+      color: white;
+    }
+
+    .add-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .list-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .green-btn {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .green-btn:hover {
+      background: #d1fae5;
+    }
+
+    .gray-btn {
+      background: white;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .gray-btn:hover {
+      background: #f8fafc;
+    }
+
+    .red-btn {
+      background: #fff1f2;
+      color: #e11d48;
+      border: 1px solid #fecdd3;
+    }
+
+    .red-btn:hover {
+      background: #ffe4e6;
+    }
+
+    .orange-btn {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #fdba74;
+    }
+
+    .orange-btn:hover {
+      background: #ffedd5;
+    }
+
+    .student-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .student-item {
+      padding: 16px;
+      border-top: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .avatar.pending {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .avatar.present {
+      background: #d1fae5;
+      color: #047857;
+    }
+
+    .avatar.absent {
+      background: #ffe4e6;
+      color: #be123c;
+    }
+
+    .student-left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .student-name {
+      font-weight: bold;
+      font-size: 18px;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+
+    .badge-purple {
+      background: #f3e8ff;
+      color: #6d28d9;
+    }
+
+    .badge-gray {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .status-line {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .status-present {
+      color: #059669;
+      font-weight: 700;
+    }
+
+    .status-absent {
+      color: #e11d48;
+      font-weight: 700;
+    }
+
+    .status-pending {
+      color: #d97706;
+      font-weight: 700;
+    }
+
+    .student-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .present-btn {
+      background: white;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+
+    .present-btn.active {
+      background: #10b981;
+      color: white;
+      border-color: #059669;
+    }
+
+    .absent-btn {
+      background: white;
+      color: #e11d48;
+      border: 1px solid #fecdd3;
+    }
+
+    .absent-btn.active {
+      background: #f43f5e;
+      color: white;
+      border-color: #e11d48;
+    }
+
+    .remove-btn {
+      background: white;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+    }
+
+    .remove-btn:hover {
+      color: #e11d48;
+      border-color: #fecdd3;
+      background: #fff1f2;
+    }
+
+    .empty-state {
+      padding: 40px;
+      text-align: center;
+      color: #64748b;
+    }
+
+    @media (max-width: 768px) {
+      .student-item {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .student-actions {
+        width: 100%;
+      }
+
+      .student-actions button {
+        flex: 1;
+      }
+
+      .inline-form {
+        flex-direction: column;
+      }
+
+      .inline-form input {
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <div class="brand">ClassPortal</div>
+      <div class="nav-buttons">
+        <button id="studentTabBtn" class="nav-btn active">Student Check-In</button>
+        <button id="adminTabBtn" class="nav-btn">Admin Dashboard</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- STUDENT VIEW -->
+  <section id="studentView" class="container">
+    <div class="center-wrap">
+      <div class="card">
+        <h1>Student Check-In</h1>
+        <p class="subtitle" id="todayDateStudent"></p>
+
+        <form id="studentCheckInForm">
+          <input id="checkInRoll" type="text" class="big-input" placeholder="Roll Number" />
+          <input id="checkInPassword" type="password" class="big-input" placeholder="Password" />
+
+          <div class="sig-box">
+            <p><strong>Are you interested in Signature Day?</strong></p>
+            <div class="sig-options">
+              <div id="sigYesBtn" class="sig-option">Yes</div>
+              <div id="sigNoBtn" class="sig-option">No</div>
+            </div>
+          </div>
+
+          <button id="markPresentBtn" type="submit" class="primary-btn" disabled>Mark Present</button>
+        </form>
+
+        <div id="studentMessage" class="message hidden"></div>
+      </div>
+
+      <div class="small-note">
+        Total Checked In Today: <b id="checkedInCount">0</b> / <span id="totalCount">0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN LOGIN VIEW -->
+  <section id="adminLoginView" class="container hidden">
+    <div class="center-wrap">
+      <div class="card">
+        <h1>Admin Access</h1>
+        <p class="subtitle">Please login to manage attendance</p>
+
+        <form id="adminLoginForm">
+          <input id="adminIdInput" type="text" class="big-input" placeholder="Admin ID" />
+          <input id="adminPasswordInput" type="password" class="big-input" placeholder="Password" />
+          <button id="adminLoginBtn" type="submit" class="dark-btn" disabled>Login to Dashboard</button>
+        </form>
+
+        <div id="adminLoginMessage" class="message hidden"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN DASHBOARD VIEW -->
+  <section id="adminDashboardView" class="hidden">
+    <div class="dashboard-header">
+      <div class="dashboard-header-inner">
+        <div>
+          <h2 style="margin: 0;">Attendance Dashboard</h2>
+          <p class="subtitle" id="todayDateAdmin" style="margin: 6px 0 0 0;"></p>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <div class="filter-tabs">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="present">Present</button>
+            <button class="filter-btn" data-filter="absent">Absent</button>
+            <button class="filter-btn" data-filter="pending">Pending</button>
+          </div>
+          <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-title">Total</div>
+          <div class="stat-value" id="statTotal">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Present</div>
+          <div class="stat-value" id="statPresent">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Absent</div>
+          <div class="stat-value" id="statAbsent">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Pending</div>
+          <div class="stat-value" id="statPending">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Sig. Day Yes</div>
+          <div class="stat-value" id="statSigYes">0</div>
+        </div>
+      </div>
+
+      <!-- ADD STUDENT -->
+      <div class="section-card">
+        <div class="section-body">
+          <form id="addStudentForm" class="inline-form">
+            <input id="newStudentInput" type="text" placeholder="Add student manually (e.g. 465 or LE08)" />
+            <button type="submit" class="add-btn">Add Student</button>
+          </form>
+          <div id="adminInlineMessage" class="message hidden" style="margin-top: 12px;"></div>
+        </div>
+      </div>
+
+      <!-- ACTIONS + LIST -->
+      <div class="section-card">
+        <div class="section-head">
+          <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;">
+            <div>
+              <strong id="listTitle">All Students</strong>
+              <span id="listCount" class="badge badge-gray">0</span>
+            </div>
+            <div class="list-actions">
+              <button id="markAllPresentBtn" class="green-btn">Mark All Present</button>
+              <button id="resetAllBtn" class="gray-btn">Reset All</button>
+              <button id="resetDefaultBtn" class="orange-btn">Reset to Default Class List</button>
+            </div>
+          </div>
+        </div>
+
+        <ul id="studentList" class="student-list"></ul>
+        <div id="emptyState" class="empty-state hidden">No students found in this category.</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // =========================
+    // STORAGE KEYS
+    // =========================
+    const STORAGE_KEYS = {
+      people: 'attendancePeople',
+      adminLoggedIn: 'attendanceAdminLoggedIn'
+    };
+
+    // =========================
+    // STATE
+    // =========================
+    let viewMode = 'student'; // student | admin
+    let isAdminLoggedIn = localStorage.getItem(STORAGE_KEYS.adminLoggedIn) === 'true';
+    let filter = 'all';
+    let people = loadPeople();
+
+    let checkInSignatureDay = null;
+    let studentMessageTimeout = null;
+    let adminInlineTimeout = null;
+
+    // =========================
+    // ELEMENTS
+    // =========================
+    const studentTabBtn = document.getElementById('studentTabBtn');
+    const adminTabBtn = document.getElementById('adminTabBtn');
+
+    const studentView = document.getElementById('studentView');
+    const adminLoginView = document.getElementById('adminLoginView');
+    const adminDashboardView = document.getElementById('adminDashboardView');
+
+    const todayDateStudent = document.getElementById('todayDateStudent');
+    const todayDateAdmin = document.getElementById('todayDateAdmin');
+
+    const checkInRoll = document.getElementById('checkInRoll');
+    const checkInPassword = document.getElementById('checkInPassword');
+    const sigYesBtn = document.getElementById('sigYesBtn');
+    const sigNoBtn = document.getElementById('sigNoBtn');
+    const markPresentBtn = document.getElementById('markPresentBtn');
+    const studentCheckInForm = document.getElementById('studentCheckInForm');
+    const studentMessage = document.getElementById('studentMessage');
+    const checkedInCount = document.getElementById('checkedInCount');
+    const totalCount = document.getElementById('totalCount');
+
+    const adminLoginForm = document.getElementById('adminLoginForm');
+    const adminIdInput = document.getElementById('adminIdInput');
+    const adminPasswordInput = document.getElementById('adminPasswordInput');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminLoginMessage = document.getElementById('adminLoginMessage');
+
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const statTotal = document.getElementById('statTotal');
+    const statPresent = document.getElementById('statPresent');
+    const statAbsent = document.getElementById('statAbsent');
+    const statPending = document.getElementById('statPending');
+    const statSigYes = document.getElementById('statSigYes');
+
+    const addStudentForm = document.getElementById('addStudentForm');
+    const newStudentInput = document.getElementById('newStudentInput');
+    const adminInlineMessage = document.getElementById('adminInlineMessage');
+
+    const listTitle = document.getElementById('listTitle');
+    const listCount = document.getElementById('listCount');
+    const studentList = document.getElementById('studentList');
+    const emptyState = document.getElementById('emptyState');
+
+    const markAllPresentBtn = document.getElementById('markAllPresentBtn');
+    const resetAllBtn = document.getElementById('resetAllBtn');
+    const resetDefaultBtn = document.getElementById('resetDefaultBtn');
+
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    // =========================
+    // INIT
+    // =========================
+    init();
+
+    function init() {
+      const today = new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      todayDateStudent.textContent = today;
+      todayDateAdmin.textContent = today;
+
+      attachEvents();
+      render();
+    }
+
+    // =========================
+    // DATA HELPERS
+    // =========================
+    function generateInitialRolls() {
+      const rolls = [];
+
+      for (let i = 401; i <= 464; i++) {
+        rolls.push({
+          id: String(i),
+          name: String(i),
+          status: 'none',
+          signatureDay: null
+        });
+      }
+
+      for (let i = 1; i <= 7; i++) {
+        const le = `LE0${i}`;
+        rolls.push({
+          id: le,
+          name: le,
+          status: 'none',
+          signatureDay: null
+        });
+      }
+
+      return rolls;
+    }
+
+    function loadPeople() {
+      const saved = localStorage.getItem(STORAGE_KEYS.people);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (e) {}
+      }
+      return generateInitialRolls();
+    }
+
+    function savePeople() {
+      localStorage.setItem(STORAGE_KEYS.people, JSON.stringify(people));
+    }
+
+    function getStats() {
+      return {
+        total: people.length,
+        present: people.filter(p => p.status === 'present').length,
+        absent: people.filter(p => p.status === 'absent').length,
+        pending: people.filter(p => p.status === 'none').length,
+        signatureDayYes: people.filter(p => p.signatureDay === 'yes').length
+      };
+    }
+
+    function getFilteredPeople() {
+      if (filter === 'all') return people;
+      if (filter === 'pending') return people.filter(p => p.status === 'none');
+      return people.filter(p => p.status === filter);
+    }
+
+    function getDisplayStatus(status) {
+      if (status === 'present') return 'Present';
+      if (status === 'absent') return 'Absent';
+      return 'Pending';
+    }
+
+    function normalizeRollInput(input) {
+      const value = input.trim().toUpperCase();
+
+      // 3-digit roll
+      if (/^\d{3}$/.test(value)) return value;
+
+      // LE format like le01 / LE01
+      if (/^LE\d{2}$/.test(value)) return value;
+
+      return value;
+    }
+
+    function isValidManualRoll(input) {
+      const value = normalizeRollInput(input);
+      return /^\d{3}$/.test(value) || /^LE\d{2}$/.test(value);
+    }
+
+    function showStudentMessage(type, text) {
+      if (studentMessageTimeout) clearTimeout(studentMessageTimeout);
+
+      studentMessage.className = `message ${type}`;
+      studentMessage.textContent = text;
+      studentMessage.classList.remove('hidden');
+
+      studentMessageTimeout = setTimeout(() => {
+        studentMessage.classList.add('hidden');
+      }, 3500);
+    }
+
+    function showAdminInlineMessage(type, text) {
+      if (adminInlineTimeout) clearTimeout(adminInlineTimeout);
+
+      adminInlineMessage.className = `message ${type}`;
+      adminInlineMessage.textContent = text;
+      adminInlineMessage.classList.remove('hidden');
+
+      adminInlineTimeout = setTimeout(() => {
+        adminInlineMessage.classList.add('hidden');
+      }, 3000);
+    }
+
+    function showAdminLoginMessage(type, text) {
+      adminLoginMessage.className = `message ${type}`;
+      adminLoginMessage.textContent = text;
+      adminLoginMessage.classList.remove('hidden');
+    }
+
+    function clearAdminLoginMessage() {
+      adminLoginMessage.classList.add('hidden');
+      adminLoginMessage.textContent = '';
+    }
+
+    // =========================
+    // EVENTS
+    // =========================
+    function attachEvents() {
+      studentTabBtn.addEventListener('click', () => {
+        viewMode = 'student';
+        clearAdminLoginMessage();
+        render();
+      });
+
+      adminTabBtn.addEventListener('click', () => {
+        viewMode = 'admin';
+        clearAdminLoginMessage();
+        render();
+      });
+
+      checkInRoll.addEventListener('input', updateStudentCheckInButton);
+      checkInPassword.addEventListener('input', updateStudentCheckInButton);
+
+      sigYesBtn.addEventListener('click', () => {
+        checkInSignatureDay = 'yes';
+        updateSignatureButtons();
+        updateStudentCheckInButton();
+      });
+
+      sigNoBtn.addEventListener('click', () => {
+        checkInSignatureDay = 'no';
+        updateSignatureButtons();
+        updateStudentCheckInButton();
+      });
+
+      studentCheckInForm.addEventListener('submit', handleStudentCheckIn);
+
+      adminIdInput.addEventListener('input', updateAdminLoginButton);
+      adminPasswordInput.addEventListener('input', updateAdminLoginButton);
+      adminLoginForm.addEventListener('submit', handleAdminLogin);
+
+      logoutBtn.addEventListener('click', handleAdminLogout);
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filter = btn.dataset.filter;
+          render();
+        });
+      });
+
+      addStudentForm.addEventListener('submit', handleAddStudent);
+
+      markAllPresentBtn.addEventListener('click', handleMarkAllPresent);
+      resetAllBtn.addEventListener('click', handleResetAll);
+      resetDefaultBtn.addEventListener('click', handleResetDefaultList);
+    }
+
+    // =========================
+    // STUDENT ACTIONS
+    // =========================
+    function updateSignatureButtons() {
+      sigYesBtn.className = 'sig-option' + (checkInSignatureDay === 'yes' ? ' active-yes' : '');
+      sigNoBtn.className = 'sig-option' + (checkInSignatureDay === 'no' ? ' active-no' : '');
+    }
+
+    function updateStudentCheckInButton() {
+      const enabled =
+        checkInRoll.value.trim() &&
+        checkInPassword.value.trim() &&
+        checkInSignatureDay;
+
+      markPresentBtn.disabled = !enabled;
+    }
+
+    function handleStudentCheckIn(e) {
+      e.preventDefault();
+
+      const rollInputRaw = checkInRoll.value.trim();
+      const rollInput = normalizeRollInput(rollInputRaw);
+      const password = checkInPassword.value.trim();
+
+      if (!rollInput || !password || !checkInSignatureDay) return;
+
+      const studentIndex = people.findIndex(
+        p => p.name.toLowerCase() === rollInput.toLowerCase()
+      );
+
+      if (studentIndex < 0) {
+        showStudentMessage('error', `Roll ${rollInput} not found. Please check your number.`);
+        resetStudentForm();
+        return;
+      }
+
+      const officialRollName = people[studentIndex].name;
+      const expectedPassword = `iareece@${officialRollName}`;
+
+      if (password !== expectedPassword) {
+        showStudentMessage('error', 'Incorrect password!');
+        resetStudentForm();
+        return;
+      }
+
+      if (people[studentIndex].status === 'present') {
+        showStudentMessage('warning', `Roll ${officialRollName} is already marked present!`);
+        resetStudentForm();
+        return;
+      }
+
+      people[studentIndex].status = 'present';
+      people[studentIndex].signatureDay = checkInSignatureDay;
+
+      savePeople();
+      render();
+
+      showStudentMessage('success', `Welcome! Roll ${officialRollName} successfully checked in.`);
+      resetStudentForm();
+    }
+
+    function resetStudentForm() {
+      checkInRoll.value = '';
+      checkInPassword.value = '';
+      checkInSignatureDay = null;
+      updateSignatureButtons();
+      updateStudentCheckInButton();
+    }
+
+    // =========================
+    // ADMIN LOGIN
+    // =========================
+    function updateAdminLoginButton() {
+      const enabled = adminIdInput.value.trim() && adminPasswordInput.value.trim();
+      adminLoginBtn.disabled = !enabled;
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+
+      const id = adminIdInput.value.trim();
+      const password = adminPasswordInput.value.trim();
+
+      if (id === '1809' && password === '1213') {
+        isAdminLoggedIn = true;
+        localStorage.setItem(STORAGE_KEYS.adminLoggedIn, 'true');
+
+        adminIdInput.value = '';
+        adminPasswordInput.value = '';
+        clearAdminLoginMessage();
+        updateAdminLoginButton();
+
+        render();
+      } else {
+        showAdminLoginMessage('error', 'Invalid ID or Password!');
+      }
+    }
+
+    function handleAdminLogout() {
+      isAdminLoggedIn = false;
+      localStorage.setItem(STORAGE_KEYS.adminLoggedIn, 'false');
+      viewMode = 'student';
+      clearAdminLoginMessage();
+      render();
+    }
+
+    // =========================
+    // ADMIN DASHBOARD ACTIONS
+    // =========================
+    function handleAddStudent(e) {
+      e.preventDefault();
+
+      const raw = newStudentInput.value.trim();
+      if (!raw) return;
+
+      const normalized = normalizeRollInput(raw);
+
+      if (!isValidManualRoll(normalized)) {
+        showAdminInlineMessage('error', 'Invalid roll format. Use 3-digit roll (e.g. 465) or LE format (e.g. LE08).');
+        return;
+      }
+
+      const exists = people.some(p => p.name.toLowerCase() === normalized.toLowerCase());
+      if (exists) {
+        showAdminInlineMessage('warning', 'Student already exists!');
+        return;
+      }
+
+      people.unshift({
+        id: normalized + '_' + Date.now(),
+        name: normalized,
+        status: 'none',
+        signatureDay: null
+      });
+
+      savePeople();
+      newStudentInput.value = '';
+      render();
+
+      showAdminInlineMessage('success', `Student ${normalized} added successfully.`);
+    }
+
+    function handleMarkAllPresent() {
+      if (!confirm('Are you sure you want to mark everyone as Present?')) return;
+
+      people = people.map(p => ({
+        ...p,
+        status: 'present',
+        signatureDay: p.signatureDay
+      }));
+
+      savePeople();
+      render();
+      showAdminInlineMessage('success', 'All students marked as Present.');
+    }
+
+    function handleResetAll() {
+      if (!confirm('Are you sure you want to reset everyone to Pending?')) return;
+
+      people = people.map(p => ({
+        ...p,
+        status: 'none',
+        signatureDay: null
+      }));
+
+      savePeople();
+      render();
+      showAdminInlineMessage('info', 'All students reset to Pending and Signature Day cleared.');
+    }
+
+    function handleResetDefaultList() {
+      if (!confirm('Are you sure you want to restore the default class list? This will erase all current attendance data.')) return;
+
+      people = generateInitialRolls();
+      savePeople();
+      render();
+      showAdminInlineMessage('info', 'Default class list restored successfully.');
+    }
+
+    function handleUpdateStatus(id, newStatus) {
+      people = people.map(p => {
+        if (p.id === id) {
+          return { ...p, status: newStatus };
+        }
+        return p;
+      });
+
+      savePeople();
+      render();
+    }
+
+    function handleRemoveStudent(id) {
+      const person = people.find(p => p.id === id);
+      if (!person) return;
+
+      if (!confirm(`Remove student ${person.name}?`)) return;
+
+      people = people.filter(p => p.id !== id);
+      savePeople();
+      render();
+
+      showAdminInlineMessage('info', `Student ${person.name} removed.`);
+    }
+
+    // =========================
+    // RENDER
+    // =========================
+    function render() {
+      renderNav();
+      renderViews();
+      renderStudentStats();
+      renderDashboard();
+    }
+
+    function renderNav() {
+      studentTabBtn.classList.toggle('active', viewMode === 'student');
+      adminTabBtn.classList.toggle('active', viewMode === 'admin');
+    }
+
+    function renderViews() {
+      if (viewMode === 'student') {
+        studentView.classList.remove('hidden');
+        adminLoginView.classList.add('hidden');
+        adminDashboardView.classList.add('hidden');
+        return;
+      }
+
+      studentView.classList.add('hidden');
+
+      if (!isAdminLoggedIn) {
+        adminLoginView.classList.remove('hidden');
+        adminDashboardView.classList.add('hidden');
+      } else {
+        adminLoginView.classList.add('hidden');
+        adminDashboardView.classList.remove('hidden');
+      }
+    }
+
+    function renderStudentStats() {
+      const stats = getStats();
+      checkedInCount.textContent = stats.present;
+      totalCount.textContent = stats.total;
+    }
+
+    function renderDashboard() {
+      const stats = getStats();
+
+      statTotal.textContent = stats.total;
+      statPresent.textContent = stats.present;
+      statAbsent.textContent = stats.absent;
+      statPending.textContent = stats.pending;
+      statSigYes.textContent = stats.signatureDayYes;
+
+      filterButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+      });
+
+      const filteredPeople = getFilteredPeople();
+
+      const titleMap = {
+        all: 'All Students',
+        present: 'Present Students',
+        absent: 'Absent Students',
+        pending: 'Pending Students'
+      };
+
+      listTitle.textContent = titleMap[filter];
+      listCount.textContent = filteredPeople.length;
+
+      studentList.innerHTML = '';
+
+      if (filteredPeople.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      filteredPeople.forEach(person => {
+        const li = document.createElement('li');
+        li.className = 'student-item';
+
+        const avatarStatus = person.status === 'present'
+          ? 'present'
+          : person.status === 'absent'
+          ? 'absent'
+          : 'pending';
+
+        const statusClass = person.status === 'present'
+          ? 'status-present'
+          : person.status === 'absent'
+          ? 'status-absent'
+          : 'status-pending';
+
+        const signatureBadge = person.signatureDay === 'yes'
+          ? `<span class="badge badge-purple">Sig. Day: Yes</span>`
+          : person.signatureDay === 'no'
+          ? `<span class="badge badge-gray">Sig. Day: No</span>`
+          : '';
+
+        li.innerHTML = `
+          <div class="student-left">
+            <div class="avatar ${avatarStatus}">${person.name.substring(0, 3)}</div>
+            <div>
+              <div class="student-name">
+                Roll: ${person.name}
+                ${signatureBadge}
+              </div>
+              <div class="status-line">
+                Status: <span class="${statusClass}">${getDisplayStatus(person.status)}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="student-actions">
+            <button class="action-btn present-btn ${person.status === 'present' ? 'active' : ''}" data-action="present" data-id="${person.id}">
+              Present
+            </button>
+            <button class="action-btn absent-btn ${person.status === 'absent' ? 'active' : ''}" data-action="absent" data-id="${person.id}">
+              Absent
+            </button>
+            <button class="action-btn remove-btn" data-action="remove" data-id="${person.id}">
+              Remove
+            </button>
+          </div>
+        `;
+
+        studentList.appendChild(li);
+      });
+
+      // Attach row action events
+      studentList.querySelectorAll('button[data-action]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const action = btn.dataset.action;
+          const id = btn.dataset.id;
+
+          if (action === 'present') handleUpdateStatus(id, 'present');
+          if (action === 'absent') handleUpdateStatus(id, 'absent');
+          if (action === 'remove') handleRemoveStudent(id);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
